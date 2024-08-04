@@ -181,7 +181,7 @@ function switchToSecondScreen() {
     setTimeout(() => {
         guideMessage.style.opacity = '0';
     }, 5000);
-    
+
     initializeMovingImage();
 }
 
@@ -247,3 +247,15 @@ function initializeMovingImage() {
         updateImage();
     }, ANIMATION_INTERVAL);
 }
+
+
+function preloadImages() {
+    const imageUrls = ['move1r.png', 'move2r.png', 'move3r.png', 'move1l.png', 'move2l.png', 'move3l.png'];
+    imageUrls.forEach(url => {
+        const img = new Image();
+        img.src = url;
+    });
+}
+
+// 페이지 로드 시 실행
+window.onload = preloadImages;
