@@ -8,7 +8,7 @@ let customCursor = null;
 var player;
 var isPlayerReady = false;
 
-// YouTube IFrame API 로드
+
 var tag = document.createElement('script');
 tag.src = "https://www.youtube.com/iframe_api";
 var firstScriptTag = document.getElementsByTagName('script')[0];
