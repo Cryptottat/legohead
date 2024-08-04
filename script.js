@@ -206,13 +206,10 @@ function initializeMovingImage() {
         if (velocity !== 0) {
             sequenceIndex = (sequenceIndex + 1) % sequence.length;
             let imageIndex = sequence[sequenceIndex];
-            if (velocity < 0) {
-                movingImage.src = imagesLeft[imageIndex];
-            } else {
-                movingImage.src = imagesRight[imageIndex];
-            }
+            let imageSrc = velocity < 0 ? imagesLeft[imageIndex] : imagesRight[imageIndex];
+            movingImage.style.backgroundImage = `url('${imageSrc}')`;
         } else {
-            movingImage.src = 'idle-image.png';
+            movingImage.style.backgroundImage = "url('idle-image.png')";
         }
         movingImage.style.transform = `translateX(${position}px)`;
     }
