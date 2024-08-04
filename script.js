@@ -212,6 +212,8 @@ function initializeMovingImage() {
             movingImage.style.backgroundImage = "url('idle-image.png')";
         }
         movingImage.style.transform = `translateX(${position}px)`;
+        // 강제 리페인트
+    void movingImage.offsetWidth;
     }
     
     function updatePosition() {
