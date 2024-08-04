@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>인터랙티브 이미지 게임</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="youtube-player" style="display: none;"></div>
+    <div id="first-screen">
+        <img id="drop-zone" src="dropzone.png" alt="Drop Zone">
+        <div id="clickable-image-container" style="display: none;">
+            <img id="clickable-image" src="initial-image.png">
+            <div id="click-text">CLICK</div>
+    </div>
+    </div>
+    <div id="second-screen" style="display: none;">
+        <div id="background-container"></div>
+
+        <div id="button-container">
+            <a href="https://twitter.com" target="_blank" class="social-button"><img src="twt.png" alt="Twitter"></a>
+            <a href="https://telegram.org" target="_blank" class="social-button"><img src="tel.png" alt="Telegram"></a>
+            <a href="https://pump.fun" target="_blank" class="social-button"><img src="pump.png" alt="Pump"></a>
+            <a href="https://dexscreener.com" target="_blank" class="social-button"><img src="dex.png" alt="DEX"></a>
+        </div>
+
+        <div id="game-area"></div>
+        <div id="guide-message">↙Look here! Move your mouse left and right within the screen</div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
