@@ -1,12 +1,9 @@
 var clickableImageContainer = document.getElementById('clickable-image-container');
 const clickableImage = document.getElementById('clickable-image');
 const dropZone = document.getElementById('drop-zone');
-// 추가: click 텍스트 요소 선택
 const clickText = document.getElementById('click-text');
 let isImageClicked = false;
 let customCursor = null;
-
-
 
 var player;
 var isPlayerReady = false;
@@ -38,22 +35,13 @@ function onPlayerReady(event) {
     clickableImage.addEventListener('click', handleClick);
 }
 
-
 function handleClick(e) {
     if (!isPlayerReady) return;
 
     isImageClicked = true;
-    
-    // 클릭 시 텍스트 숨기기
     clickText.style.display = 'none';
-    
-    // 오디오 재생
     playAudio();
-
-    // 커스텀 커서 생성
     createCustomCursor();
-
-    // 마우스 이동 이벤트 리스너 추가
     document.addEventListener('mousemove', moveCustomCursor);
 }
 
@@ -76,54 +64,13 @@ function createCustomCursor() {
     customCursor.style.height = '50px';
     document.body.appendChild(customCursor);
 
-    // 원본 이미지 숨기기
     clickableImage.style.visibility = 'hidden';
-
-    // 마우스 기본 커서 숨기기
     document.body.style.cursor = 'none';
 }
 
-// function playAudio() {
-//     if (isPlayerReady && player && typeof player.playVideo === 'function') {
-//         player.playVideo();
-//         player.setVolume(30);
-//     } else {
-//         console.log("Player is not ready yet");
-//     }
-// }
-
-
-clickableImage.addEventListener('click', (e) => {
-    isImageClicked = true;
-    
-    // 추가: 클릭 시 텍스트 숨기기
-    clickText.style.display = 'none';
-
-    // 오디오 재생
-    playAudio();
-    // 커스텀 커서 생성
-    customCursor = document.createElement('img');
-    customCursor.src = clickableImage.src;
-    customCursor.style.position = 'fixed';
-    customCursor.style.pointerEvents = 'none';
-    customCursor.style.zIndex = '1000';
-    customCursor.style.width = '50px'; // 커서 크기 조절
-    customCursor.style.height = '50px';
-    document.body.appendChild(customCursor);
-
-    // 원본 이미지 숨기기
-    clickableImage.style.visibility = 'hidden';
-
-    // 마우스 기본 커서 숨기기
-    document.body.style.cursor = 'none';
-
-    // 마우스 이동 이벤트 리스너 추가
-    document.addEventListener('mousemove', moveCustomCursor);
-});
-
 function moveCustomCursor(e) {
     if (customCursor) {
-        customCursor.style.left = `${e.clientX - 25}px`; // 커서 중앙 정렬
+        customCursor.style.left = `${e.clientX - 25}px`;
         customCursor.style.top = `${e.clientY - 25}px`;
     }
 
@@ -163,24 +110,23 @@ function dropImage(e) {
 
 function switchToSecondScreen() {
     document.getElementById('first-screen').style.display = 'none';
-    document.getElementById('second-screen').style.display = 'block';
     const secondScreen = document.getElementById('second-screen');
     secondScreen.style.display = 'block';
     
-    // 배경 이미지 추가
     const backgroundContainer = document.getElementById('background-container');
     const backgroundImage = document.createElement('img');
-    backgroundImage.src = 'background.png'; // 배경 이미지 경로를 지정하세요
+    backgroundImage.src = 'background.png';
     backgroundContainer.appendChild(backgroundImage);
 
-    // 가이드 메시지 표시
     const guideMessage = document.getElementById('guide-message');
     guideMessage.style.opacity = '1';
     
-    // 5초 후 가이드 메시지 숨기기
     setTimeout(() => {
         guideMessage.style.opacity = '0';
     }, 5000);
+
+    clickableImage.removeEventListener('click', handleClick);
+    document.removeEventListener('mousemove', moveCustomCursor);
 
     initializeMovingImage();
 }
@@ -191,34 +137,30 @@ function initializeMovingImage() {
     movingImage.id = 'moving-image';
     movingImage.src = 'idle-image.png';
     gameArea.appendChild(movingImage);
+    
     let velocity = 0;
     let position = 0;
     const imagesRight = ['move1r.png', 'move2r.png', 'move3r.png'];
     const imagesLeft = ['move1l.png', 'move2l.png', 'move3l.png'];
     let sequenceIndex = 0;
-    const sequence = [0, 1, 0, 2]; // 1, 2, 1, 3 순서 (인덱스 기준)
+    const sequence = [0, 1, 0, 2];
     
-    const SPEED_MULTIPLIER = 4; // 속도 배수
+    const SPEED_MULTIPLIER = 4;
     const BASE_VELOCITY = 5;
-    const ANIMATION_INTERVAL = 80; // 밀리초 단위 (더 작은 값 = 더 빠른 애니메이션)
     
     function updateImage() {
         if (velocity !== 0) {
             sequenceIndex = (sequenceIndex + 1) % sequence.length;
             let imageIndex = sequence[sequenceIndex];
-            let imageSrc = velocity < 0 ? imagesLeft[imageIndex] : imagesRight[imageIndex];
-            movingImage.style.backgroundImage = `url('${imageSrc}')`;
+            movingImage.src = velocity < 0 ? imagesLeft[imageIndex] : imagesRight[imageIndex];
         } else {
-            movingImage.style.backgroundImage = "url('idle-image.png')";
+            movingImage.src = 'idle-image.png';
         }
         movingImage.style.transform = `translateX(${position}px)`;
-        // 강제 리페인트
-    void movingImage.offsetWidth;
     }
     
     function updatePosition() {
         position += velocity;
-        // 게임 영역 경계 체크
         const gameAreaWidth = gameArea.offsetWidth;
         const imageWidth = movingImage.offsetWidth;
         if (position < 0) {
@@ -241,20 +183,25 @@ function initializeMovingImage() {
         }
     });
     
-    setInterval(() => {
+    function animate() {
         updatePosition();
         updateImage();
-    }, ANIMATION_INTERVAL);
+        requestAnimationFrame(animate);
+    }
+
+    requestAnimationFrame(animate);
 }
 
-
 function preloadImages() {
-    const imageUrls = ['move1r.png', 'move2r.png', 'move3r.png', 'move1l.png', 'move2l.png', 'move3l.png'];
+    const imageUrls = [
+        'move1r.png', 'move2r.png', 'move3r.png', 
+        'move1l.png', 'move2l.png', 'move3l.png', 
+        'idle-image.png', 'transformed-image.png', 'background.png'
+    ];
     imageUrls.forEach(url => {
         const img = new Image();
         img.src = url;
     });
 }
 
-// 페이지 로드 시 실행
 window.onload = preloadImages;
