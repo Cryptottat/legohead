@@ -145,8 +145,8 @@ function initializeMovingImage() {
     let sequenceIndex = 0;
     const sequence = [0, 1, 0, 2];
     
-    const SPEED_MULTIPLIER = 4;
-    const BASE_VELOCITY = 5;
+    const SPEED_MULTIPLIER = 2;
+    const BASE_VELOCITY = 3;
     
     function updateImage() {
         if (velocity !== 0) {
